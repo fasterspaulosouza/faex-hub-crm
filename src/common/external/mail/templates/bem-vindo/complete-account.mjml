@@ -1,0 +1,184 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-text
+        font-family="Helvetica, Arial, sans-serif"
+        color="#475467"
+        line-height="140%"
+      />
+      <mj-image align="center" padding="0" fluid-on-mobile="true" />
+    </mj-attributes>
+
+    <mj-style inline="inline">
+      /* Ajustes responsivos */
+      @media only screen and (max-width: 480px) {
+        .responsive-text {
+          font-size: 15px !important;
+          padding: 0 10px !important;
+        }
+        .responsive-title {
+          font-size: 22px !important;
+        }
+        .responsive-signature img {
+          width: 120px !important;
+        }
+        .responsive-logo img {
+          width: 160px !important;
+        }
+      }
+    </mj-style>
+  </mj-head>
+
+  <mj-body background-color="#f5f5f5">
+    <!-- Imagem de topo -->
+    <mj-section padding="0">
+      <mj-column>
+        <mj-image
+          src="https://faexhub.s3.us-east-1.amazonaws.com/portugal/emails/boas-vindas.png"
+          width="600px"
+          alt="Imagem de topo"
+          fluid-on-mobile="true"
+        />
+      </mj-column>
+    </mj-section>
+
+    <mj-section background-color="#ffffff" padding="20px 0">
+      <mj-column>
+        <mj-text
+          align="left"
+          font-size="26px"
+          font-weight="bold"
+          color="#475467"
+          padding="0 30px 10px 30px"
+          css-class="responsive-title"
+        >
+          Olá, <span style="color: #834781; font-size: 26px">{{ nome }}</span>
+        </mj-text>
+
+        <mj-text
+          css-class="responsive-text"
+          font-size="18px"
+          align="left"
+          color="#475467"
+          line-height="140%"
+          padding="0 30px 10px 30px"
+        >
+          Para completar o seu cadastro na Faex Hub, acesse sua conta utilizando
+          a senha provisória abaixo:
+        </mj-text>
+
+        <mj-text
+          css-class="responsive-text"
+          font-size="14px"
+          align="center"
+          color="#475467"
+          line-height="140%"
+          padding-bottom="0px"
+        >
+          <strong> Senha provisória: </strong>
+        </mj-text>
+
+        <mj-text
+          css-class="responsive-text"
+          font-size="30px"
+          align="center"
+          color="#475467"
+          line-height="140%"
+          letter-spacing="2px"
+          padding-top="4px"
+        >
+          <strong>
+            <span
+              style="
+                background-color: #f4ebff;
+                padding: 8px 20px;
+                border-radius: 6px;
+                display: inline-block;
+              "
+            >
+              {{ senha }}
+            </span>
+          </strong>
+        </mj-text>
+
+        <mj-text
+          css-class="responsive-text"
+          font-size="17.5px"
+          align="left"
+          color="#475467"
+          line-height="140%"
+          padding="15px 30px 10px 30px"
+        >
+          Após fazer login, <strong>você poderá atualizar seus dados</strong> e
+          personalizar sua experiência no site.
+        </mj-text>
+
+        <mj-text
+          css-class="responsive-text"
+          font-size="18px"
+          align="left"
+          color="#475467"
+          line-height="140%"
+          padding="0 30px 10px 30px"
+        >
+          Clique no botão abaixo para entrar na sua conta:
+        </mj-text>
+
+        <mj-button
+          href="https://parceiro.faexhub.pt/"
+          background-color="#834781"
+          color="#ffffff"
+          font-size="17px"
+          font-weight="bold"
+          padding="10px 0 0 0"
+          border-radius="8px"
+          width="300px"
+          align="center"
+          text-transform="uppercase"
+        >
+          <span style="display: inline-flex; align-items: center; gap: 8px">
+            ACESSAR SUA CONTA
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="17"
+              height="17"
+              viewBox="0 0 48 48"
+              fill="none"
+            >
+              <path
+                d="M29.5315 23.6255H9.84375"
+                stroke="white"
+                stroke-width="4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M23.626 29.5309L29.5323 23.6246L23.626 17.7183"
+                stroke="white"
+                stroke-width="4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M7.77734 31.5007C8.62065 33.2238 9.74192 34.7962 11.0962 36.1549C16.1638 41.2225 23.785 42.7385 30.4061 39.996C37.0273 37.2534 41.3444 30.7924 41.3444 23.6257C41.3444 16.4591 37.0273 9.9981 30.4061 7.25554C23.785 4.51298 16.1638 6.02895 11.0962 11.0966C9.74194 12.4552 8.62066 14.0276 7.77734 15.7505"
+                stroke="white"
+                stroke-width="4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </span>
+        </mj-button>
+
+        <mj-image
+          src="https://faexhub.s3.us-east-1.amazonaws.com/portugal/emails/logo.png"
+          alt="Logotipo Faex Hub"
+          width="200px"
+          fluid-on-mobile="true"
+          padding-top="20px"
+          css-class="responsive-logo"
+        />
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

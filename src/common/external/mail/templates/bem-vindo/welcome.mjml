@@ -1,0 +1,272 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-text
+        font-family="Helvetica, Arial, sans-serif"
+        color="#475467"
+        line-height="140%"
+      />
+      <mj-image align="center" padding="0" fluid-on-mobile="true" />
+    </mj-attributes>
+
+    <mj-style inline="inline">
+      /* Ajustes responsivos */
+      @media only screen and (max-width: 480px) {
+        .responsive-text {
+          font-size: 15px !important;
+          padding: 0 10px !important;
+        }
+        .responsive-title {
+          font-size: 22px !important;
+        }
+        .responsive-signature img {
+          width: 120px !important;
+        }
+        .responsive-logo img {
+          width: 160px !important;
+        }
+      }
+    </mj-style>
+  </mj-head>
+
+  <mj-body background-color="#f5f5f5">
+    <!-- Imagem de topo -->
+    <mj-section padding="0">
+      <mj-column>
+        <mj-image
+          src="https://faexhub.s3.us-east-1.amazonaws.com/portugal/emails/boas-vindas.png"
+          width="600px"
+          alt="Imagem de topo"
+          fluid-on-mobile="true"
+        />
+      </mj-column>
+    </mj-section>
+
+    <mj-section background-color="#ffffff" padding="20px 0">
+      <mj-column>
+        <mj-text
+          align="left"
+          font-size="26px"
+          font-weight="bold"
+          color="#475467"
+          padding="0 50px 10px 50px"
+          css-class="responsive-title"
+        >
+          Olá, <span style="color: #834781; font-size: 26px">{{ nome }}</span>
+        </mj-text>
+
+        <mj-text
+          css-class="responsive-text"
+          font-size="19px"
+          align="left"
+          color="#475467"
+          line-height="140%"
+          padding="0 50px 10px 50px"
+        >
+          Obrigado por se cadastrar na Faex Hub. Sua decisão aproxima você dos
+          alunos que permanecem firmes mesmo diante dos desafios da tecnologia
+        </mj-text>
+
+        <mj-text
+          css-class="responsive-text"
+          font-size="17px"
+          align="left"
+          color="#475467"
+          line-height="160%"
+          padding="0 70px 10px 70px"
+          background-color="#F9FAFB"
+        >
+          <strong>A partir de agora, você poderá:</strong>
+          <table
+            role="presentation"
+            cellpadding="0"
+            cellspacing="0"
+            style="border: none; margin-top: 10px"
+          >
+            <tr>
+              <td
+                width="32"
+                style="padding-right: 10px; vertical-align: middle"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="26"
+                  height="26"
+                  viewBox="0 0 64 64"
+                  fill="none"
+                >
+                  <circle cx="32" cy="32" r="32" fill="#78DEAB" />
+                  <circle cx="32" cy="32" r="25" fill="#35C67A" />
+                  <circle
+                    cx="32"
+                    cy="32"
+                    r="17"
+                    stroke="white"
+                    stroke-width="3"
+                    fill="none"
+                  />
+                  <path
+                    d="M24 32L29 37L40 26"
+                    stroke="white"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </td>
+              <td
+                style="
+                  vertical-align: middle;
+                  font-family: Helvetica, Arial, sans-serif;
+                  font-size: 17px;
+                  color: #475467;
+                  padding-bottom: 8px;
+                "
+              >
+                Acompanhar nossas novidades e campanhas
+              </td>
+            </tr>
+
+            <tr>
+              <td
+                width="32"
+                style="padding-right: 10px; vertical-align: middle"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="26"
+                  height="26"
+                  viewBox="0 0 64 64"
+                  fill="none"
+                >
+                  <circle cx="32" cy="32" r="32" fill="#78DEAB" />
+                  <circle cx="32" cy="32" r="25" fill="#35C67A" />
+                  <circle
+                    cx="32"
+                    cy="32"
+                    r="17"
+                    stroke="white"
+                    stroke-width="3"
+                    fill="none"
+                  />
+                  <path
+                    d="M24 32L29 37L40 26"
+                    stroke="white"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </td>
+              <td
+                style="
+                  vertical-align: middle;
+                  font-family: Helvetica, Arial, sans-serif;
+                  font-size: 17px;
+                  color: #475467;
+                  padding-bottom: 8px;
+                "
+              >
+                Conhecer histórias de fé e esperança
+              </td>
+            </tr>
+
+            <tr>
+              <td
+                width="32"
+                style="padding-right: 10px; vertical-align: middle"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="26"
+                  height="26"
+                  viewBox="0 0 64 64"
+                  fill="none"
+                >
+                  <circle cx="32" cy="32" r="32" fill="#78DEAB" />
+                  <circle cx="32" cy="32" r="25" fill="#35C67A" />
+                  <circle
+                    cx="32"
+                    cy="32"
+                    r="17"
+                    stroke="white"
+                    stroke-width="3"
+                    fill="none"
+                  />
+                  <path
+                    d="M24 32L29 37L40 26"
+                    stroke="white"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </td>
+              <td
+                style="
+                  vertical-align: middle;
+                  font-family: Helvetica, Arial, sans-serif;
+                  font-size: 17px;
+                  color: #475467;
+                  padding-bottom: 8px;
+                "
+              >
+                Contribuir e transformar vidas
+              </td>
+            </tr>
+          </table>
+        </mj-text>
+
+        <mj-text
+          css-class="responsive-text"
+          font-size="18px"
+          align="left"
+          color="#475467"
+          line-height="140%"
+          padding="0 50px 10px 50px"
+        >
+          Para finalizar seu cadastro e ter acesso aos recursos exclusivos,
+          <strong>confirme sua conta no botão abaixo</strong>:
+        </mj-text>
+
+        <mj-button
+          href="#"
+          background-color="#834781"
+          color="#ffffff"
+          font-size="17px"
+          font-weight="bold"
+          padding="10px 0 0 0"
+          border-radius="8px"
+          width="300px"
+          align="center"
+          text-transform="uppercase"
+        >
+          <span style="display: inline-flex; align-items: center; gap: 8px">
+            CONFIRMAR CONTA
+          </span>
+        </mj-button>
+
+        <mj-text
+          css-class="responsive-text"
+          font-size="12px"
+          align="center"
+          color="#475467"
+          line-height="140%"
+          padding="0 50px 10px 50px"
+          padding-top="5px"
+        >
+          Esse link é valido para 7 dias.
+        </mj-text>
+
+        <mj-image
+          src="https://faexhub.s3.us-east-1.amazonaws.com/portugal/emails/logo.png"
+          alt="Logotipo Faex Hub"
+          width="200px"
+          fluid-on-mobile="true"
+          padding-top="20px"
+          css-class="responsive-logo"
+        />
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

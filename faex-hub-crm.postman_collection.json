@@ -1,0 +1,876 @@
+{
+  "info": {
+    "name": "Faex Hub CRM",
+    "description": "Collection completa da API Faex Hub CRM. Faça login primeiro e copie o token para a variável {{token}}.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "🔐 Auth",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.token) {",
+                  "  pm.collectionVariables.set('token', res.token);",
+                  "  console.log('Token salvo:', res.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@faex.edu.br\",\n  \"senha\": \"Test@1234\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "Cadastro",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Novo Usuário\",\n  \"email\": \"novo@faex.edu.br\",\n  \"senha\": \"Test@1234\",\n  \"funcao\": \"ALUNO\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/cadastro", "host": ["{{baseUrl}}"], "path": ["auth", "cadastro"] }
+          }
+        },
+        {
+          "name": "Cadastro V2 (Vendas)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Parceiro Teste\",\n  \"email\": \"parceiro@email.com\",\n  \"senha\": \"Test@1234\",\n  \"funcao\": \"PARCEIRO\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/cadastrov2", "host": ["{{baseUrl}}"], "path": ["auth", "cadastrov2"] }
+          }
+        },
+        {
+          "name": "Esqueci Senha",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@faex.edu.br\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/esqueci-senha", "host": ["{{baseUrl}}"], "path": ["auth", "esqueci-senha"] }
+          }
+        },
+        {
+          "name": "Verificar Código Recuperação",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/auth/esqueci-senha/SEU_CODIGO_AQUI", "host": ["{{baseUrl}}"], "path": ["auth", "esqueci-senha", "SEU_CODIGO_AQUI"] }
+          }
+        },
+        {
+          "name": "Redefinir Senha",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"SEU_TOKEN_RECUPERACAO\",\n  \"senha\": \"NovaSenha@123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/redefinir-senha", "host": ["{{baseUrl}}"], "path": ["auth", "redefinir-senha"] }
+          }
+        },
+        {
+          "name": "Meu Perfil (me)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/auth/me", "host": ["{{baseUrl}}"], "path": ["auth", "me"] }
+          }
+        },
+        {
+          "name": "Atualizar Perfil",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Novo Nome\",\n  \"telefone\": \"11999990000\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/perfil", "host": ["{{baseUrl}}"], "path": ["auth", "perfil"] }
+          }
+        },
+        {
+          "name": "Alterar Senha (Autenticado)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"senhaAtual\": \"Test@1234\",\n  \"novaSenha\": \"NovaSenha@123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/senha", "host": ["{{baseUrl}}"], "path": ["auth", "senha"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🔒 MFA",
+      "item": [
+        {
+          "name": "Configurar MFA",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/mfa/configurar", "host": ["{{baseUrl}}"], "path": ["mfa", "configurar"] }
+          }
+        },
+        {
+          "name": "Ativar MFA",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"codigo\": \"123456\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/mfa/ativar", "host": ["{{baseUrl}}"], "path": ["mfa", "ativar"] }
+          }
+        },
+        {
+          "name": "Desativar MFA",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"senha\": \"Test@1234\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/mfa/desativar", "host": ["{{baseUrl}}"], "path": ["mfa", "desativar"] }
+          }
+        },
+        {
+          "name": "Status MFA",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/mfa/status", "host": ["{{baseUrl}}"], "path": ["mfa", "status"] }
+          }
+        },
+        {
+          "name": "Regenerar Códigos Backup",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/mfa/backup/regenerar", "host": ["{{baseUrl}}"], "path": ["mfa", "backup", "regenerar"] }
+          }
+        },
+        {
+          "name": "Verificar Código MFA (Login)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"TOKEN_MFA_PENDENTE\",\n  \"codigo\": \"123456\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/mfa/verificar", "host": ["{{baseUrl}}"], "path": ["mfa", "verificar"] }
+          }
+        },
+        {
+          "name": "Verificar Código Backup MFA",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"TOKEN_MFA_PENDENTE\",\n  \"codigoBackup\": \"ABCD1234\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/mfa/verificar-backup", "host": ["{{baseUrl}}"], "path": ["mfa", "verificar-backup"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "👥 Usuários",
+      "item": [
+        {
+          "name": "Listar Usuários",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/usuarios?pagina=1&limite=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["usuarios"],
+              "query": [
+                { "key": "pagina", "value": "1" },
+                { "key": "limite", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Busca Avançada",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/usuarios/buscar/avancado?buscaPor=&funcao=&status=&genero=&departamento=&ativo=&pagina=1&limite=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["usuarios", "buscar", "avancado"],
+              "query": [
+                { "key": "buscaPor", "value": "", "description": "Nome, email, documento ou telefone" },
+                { "key": "funcao", "value": "", "description": "ADMIN | USUARIO | PROFESSOR | ALUNO | PARCEIRO | ORGANIZACAO" },
+                { "key": "status", "value": "", "description": "NOVO | APROVADO" },
+                { "key": "genero", "value": "", "description": "MASCULINO | FEMININO" },
+                { "key": "departamento", "value": "", "description": "TECNOLOGIA | FINANCEIRO | ..." },
+                { "key": "ativo", "value": "", "description": "true | false" },
+                { "key": "pagina", "value": "1" },
+                { "key": "limite", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Estatísticas",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/usuarios/estatisticas/relatorio", "host": ["{{baseUrl}}"], "path": ["usuarios", "estatisticas", "relatorio"] }
+          }
+        },
+        {
+          "name": "Buscar por ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/usuarios/1", "host": ["{{baseUrl}}"], "path": ["usuarios", "1"] }
+          }
+        },
+        {
+          "name": "Buscar por Função",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/usuarios/ADMIN/byfuncao", "host": ["{{baseUrl}}"], "path": ["usuarios", "ADMIN", "byfuncao"] }
+          }
+        },
+        {
+          "name": "Criar Usuário Interno",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Usuário Interno\",\n  \"email\": \"interno@faex.edu.br\",\n  \"senha\": \"Test@1234\",\n  \"funcao\": \"USUARIO\",\n  \"departamento\": \"TECNOLOGIA\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/usuarios", "host": ["{{baseUrl}}"], "path": ["usuarios"] }
+          }
+        },
+        {
+          "name": "Atualizar Usuário",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Nome Atualizado\",\n  \"telefone\": \"11999990099\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/usuarios/1", "host": ["{{baseUrl}}"], "path": ["usuarios", "1"] }
+          }
+        },
+        {
+          "name": "Alterar Senha do Usuário",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"senhaAtual\": \"Test@1234\",\n  \"novaSenha\": \"NovaSenha@123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/usuarios/1/alterar-senha", "host": ["{{baseUrl}}"], "path": ["usuarios", "1", "alterar-senha"] }
+          }
+        },
+        {
+          "name": "Remover Usuário",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/usuarios/1", "host": ["{{baseUrl}}"], "path": ["usuarios", "1"] }
+          }
+        },
+        {
+          "name": "Permissões — Listar",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/usuarios/1/permissoes", "host": ["{{baseUrl}}"], "path": ["usuarios", "1", "permissoes"] }
+          }
+        },
+        {
+          "name": "Permissões — Atribuir",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"moduloId\": 1,\n  \"nivel\": \"LEITURA\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/usuarios/1/permissoes", "host": ["{{baseUrl}}"], "path": ["usuarios", "1", "permissoes"] }
+          }
+        },
+        {
+          "name": "Permissões — Remover",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/usuarios/1/permissoes/1", "host": ["{{baseUrl}}"], "path": ["usuarios", "1", "permissoes", "1"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🧩 Módulos",
+      "item": [
+        {
+          "name": "Listar Módulos",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/modulos?buscaPor=&ativo=true&pagina=1&limite=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["modulos"],
+              "query": [
+                { "key": "buscaPor", "value": "" },
+                { "key": "ativo", "value": "true" },
+                { "key": "pagina", "value": "1" },
+                { "key": "limite", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar Módulo por ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/modulos/1", "host": ["{{baseUrl}}"], "path": ["modulos", "1"] }
+          }
+        },
+        {
+          "name": "Criar Módulo",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"relatorios\",\n  \"descricao\": \"Módulo de relatórios\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/modulos", "host": ["{{baseUrl}}"], "path": ["modulos"] }
+          }
+        },
+        {
+          "name": "Atualizar Módulo",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"descricao\": \"Descrição atualizada\",\n  \"ativo\": true\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/modulos/1", "host": ["{{baseUrl}}"], "path": ["modulos", "1"] }
+          }
+        },
+        {
+          "name": "Remover Módulo",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/modulos/1", "host": ["{{baseUrl}}"], "path": ["modulos", "1"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🛡️ Grupos de Acesso",
+      "item": [
+        {
+          "name": "Listar Grupos",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/grupos-acesso?buscaPor=&ativo=true&pagina=1&limite=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["grupos-acesso"],
+              "query": [
+                { "key": "buscaPor", "value": "" },
+                { "key": "ativo", "value": "true" },
+                { "key": "pagina", "value": "1" },
+                { "key": "limite", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar Grupo por ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/grupos-acesso/1", "host": ["{{baseUrl}}"], "path": ["grupos-acesso", "1"] }
+          }
+        },
+        {
+          "name": "Criar Grupo",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Professores TI\",\n  \"descricao\": \"Grupo de professores da área de TI\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/grupos-acesso", "host": ["{{baseUrl}}"], "path": ["grupos-acesso"] }
+          }
+        },
+        {
+          "name": "Atualizar Grupo",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"descricao\": \"Descrição atualizada\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/grupos-acesso/1", "host": ["{{baseUrl}}"], "path": ["grupos-acesso", "1"] }
+          }
+        },
+        {
+          "name": "Remover Grupo",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/grupos-acesso/1", "host": ["{{baseUrl}}"], "path": ["grupos-acesso", "1"] }
+          }
+        },
+        {
+          "name": "Membros — Listar",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/grupos-acesso/1/membros", "host": ["{{baseUrl}}"], "path": ["grupos-acesso", "1", "membros"] }
+          }
+        },
+        {
+          "name": "Membros — Adicionar",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"usuarioId\": 2\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/grupos-acesso/1/membros", "host": ["{{baseUrl}}"], "path": ["grupos-acesso", "1", "membros"] }
+          }
+        },
+        {
+          "name": "Membros — Remover",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/grupos-acesso/1/membros/2", "host": ["{{baseUrl}}"], "path": ["grupos-acesso", "1", "membros", "2"] }
+          }
+        },
+        {
+          "name": "Permissões — Listar",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/grupos-acesso/1/permissoes", "host": ["{{baseUrl}}"], "path": ["grupos-acesso", "1", "permissoes"] }
+          }
+        },
+        {
+          "name": "Permissões — Atribuir",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"moduloId\": 1,\n  \"nivel\": \"LEITURA\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/grupos-acesso/1/permissoes", "host": ["{{baseUrl}}"], "path": ["grupos-acesso", "1", "permissoes"] }
+          }
+        },
+        {
+          "name": "Permissões — Remover",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/grupos-acesso/1/permissoes/1", "host": ["{{baseUrl}}"], "path": ["grupos-acesso", "1", "permissoes", "1"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🤝 Amizades",
+      "item": [
+        {
+          "name": "Listar Amizades (aceitas)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/amizades?pagina=1&limite=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["amizades"],
+              "query": [
+                { "key": "pagina", "value": "1" },
+                { "key": "limite", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Solicitações Pendentes (recebidas)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/amizades/pendentes", "host": ["{{baseUrl}}"], "path": ["amizades", "pendentes"] }
+          }
+        },
+        {
+          "name": "Solicitações Enviadas",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/amizades/enviadas", "host": ["{{baseUrl}}"], "path": ["amizades", "enviadas"] }
+          }
+        },
+        {
+          "name": "Enviar Solicitação",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"receptorId\": 3\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/amizades", "host": ["{{baseUrl}}"], "path": ["amizades"] }
+          }
+        },
+        {
+          "name": "Aceitar Solicitação",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/amizades/1/aceitar", "host": ["{{baseUrl}}"], "path": ["amizades", "1", "aceitar"] }
+          }
+        },
+        {
+          "name": "Rejeitar Solicitação",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/amizades/1/rejeitar", "host": ["{{baseUrl}}"], "path": ["amizades", "1", "rejeitar"] }
+          }
+        },
+        {
+          "name": "Remover Amizade",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/amizades/1", "host": ["{{baseUrl}}"], "path": ["amizades", "1"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📝 Publicações",
+      "item": [
+        {
+          "name": "Listar Publicações",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/publicacoes?tipo=&visibilidade=&ativo=true&buscaPor=&pagina=1&limite=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["publicacoes"],
+              "query": [
+                { "key": "tipo", "value": "", "description": "TEXTO | IMAGEM | VIDEO" },
+                { "key": "visibilidade", "value": "", "description": "PUBLICO | AMIGOS" },
+                { "key": "ativo", "value": "true" },
+                { "key": "buscaPor", "value": "" },
+                { "key": "pagina", "value": "1" },
+                { "key": "limite", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Minhas Publicações",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/publicacoes/minhas?pagina=1&limite=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["publicacoes", "minhas"],
+              "query": [
+                { "key": "pagina", "value": "1" },
+                { "key": "limite", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar Publicação por ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/publicacoes/1", "host": ["{{baseUrl}}"], "path": ["publicacoes", "1"] }
+          }
+        },
+        {
+          "name": "Criar Publicação",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tipo\": \"TEXTO\",\n  \"conteudo\": \"Olá! Esta é minha primeira publicação.\",\n  \"visibilidade\": \"PUBLICO\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/publicacoes", "host": ["{{baseUrl}}"], "path": ["publicacoes"] }
+          }
+        },
+        {
+          "name": "Atualizar Publicação",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"conteudo\": \"Conteúdo atualizado.\",\n  \"visibilidade\": \"AMIGOS\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/publicacoes/1", "host": ["{{baseUrl}}"], "path": ["publicacoes", "1"] }
+          }
+        },
+        {
+          "name": "Remover Publicação",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/publicacoes/1", "host": ["{{baseUrl}}"], "path": ["publicacoes", "1"] }
+          }
+        },
+        {
+          "name": "Comentários — Listar",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/publicacoes/1/comentarios", "host": ["{{baseUrl}}"], "path": ["publicacoes", "1", "comentarios"] }
+          }
+        },
+        {
+          "name": "Comentários — Adicionar",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"conteudo\": \"Ótima publicação!\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/publicacoes/1/comentarios", "host": ["{{baseUrl}}"], "path": ["publicacoes", "1", "comentarios"] }
+          }
+        },
+        {
+          "name": "Comentários — Remover",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/publicacoes/1/comentarios/1", "host": ["{{baseUrl}}"], "path": ["publicacoes", "1", "comentarios", "1"] }
+          }
+        },
+        {
+          "name": "Curtidas — Listar",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/publicacoes/1/curtidas", "host": ["{{baseUrl}}"], "path": ["publicacoes", "1", "curtidas"] }
+          }
+        },
+        {
+          "name": "Curtidas — Curtir / Descurtir (toggle)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/publicacoes/1/curtidas", "host": ["{{baseUrl}}"], "path": ["publicacoes", "1", "curtidas"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🎓 Conhecimento",
+      "item": [
+        {
+          "name": "Listar Conhecimentos",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/conhecimento?visibilidade=&ativo=true&buscaPor=&pagina=1&limite=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["conhecimento"],
+              "query": [
+                { "key": "visibilidade", "value": "", "description": "PRIVADO | PUBLICO" },
+                { "key": "ativo", "value": "true" },
+                { "key": "buscaPor", "value": "", "description": "Busca em título e descrição" },
+                { "key": "pagina", "value": "1" },
+                { "key": "limite", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Meus Conhecimentos",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/conhecimento/meus?pagina=1&limite=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["conhecimento", "meus"],
+              "query": [
+                { "key": "pagina", "value": "1" },
+                { "key": "limite", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar Conhecimento por ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/conhecimento/1", "host": ["{{baseUrl}}"], "path": ["conhecimento", "1"] }
+          }
+        },
+        {
+          "name": "Criar Conhecimento",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Introdução ao NestJS\",\n  \"descricao\": \"Aula sobre fundamentos do NestJS com TypeScript\",\n  \"urlYoutube\": \"https://www.youtube.com/watch?v=exemplo\",\n  \"visibilidade\": \"PUBLICO\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/conhecimento", "host": ["{{baseUrl}}"], "path": ["conhecimento"] }
+          }
+        },
+        {
+          "name": "Atualizar Conhecimento",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Título Atualizado\",\n  \"visibilidade\": \"PRIVADO\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/conhecimento/1", "host": ["{{baseUrl}}"], "path": ["conhecimento", "1"] }
+          }
+        },
+        {
+          "name": "Remover Conhecimento",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/conhecimento/1", "host": ["{{baseUrl}}"], "path": ["conhecimento", "1"] }
+          }
+        }
+      ]
+    }
+  ]
+}

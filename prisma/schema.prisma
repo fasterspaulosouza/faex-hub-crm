@@ -1,0 +1,386 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+/**
+ * ===========================
+ * ENUMS
+ * ===========================
+ */
+
+enum Genero {
+  MASCULINO
+  FEMININO
+}
+
+enum UsuarioStatus {
+  NOVO
+  APROVADO
+}
+
+enum UsuarioFuncao {
+  ADMIN
+  USUARIO
+  PROFESSOR
+  ALUNO
+  PARCEIRO
+  ORGANIZACAO
+}
+
+enum Departamento {
+  CADASTRO
+  CANAL_RELACIONAMENTO
+  COMUNICACAO
+  FINANCEIRO
+  RECURSOS_HUMANOS
+  TECNOLOGIA
+  SEM_DEPARTAMENTO
+}
+
+enum NivelPermissao {
+  NENHUM
+  LEITURA
+  ESCRITA
+  EXCLUSAO
+}
+
+enum AmizadeStatus {
+  PENDENTE
+  ACEITO
+  REJEITADO
+}
+
+enum PublicacaoTipo {
+  TEXTO
+  IMAGEM
+  VIDEO
+}
+
+enum Visibilidade {
+  PUBLICO
+  AMIGOS
+}
+
+enum VisibilidadeConhecimento {
+  PRIVADO
+  PUBLICO
+}
+
+/**
+ * ===========================
+ * MODELO: USUÁRIO
+ * ===========================
+ */
+
+model Usuario {
+  id           Int           @id @default(autoincrement())
+  nome         String        @db.VarChar(150)
+  email        String        @unique @db.VarChar(150)
+  senha        String        @db.VarChar(255)
+  telefone     String?       @db.VarChar(20)
+  documento    String?       @unique @db.VarChar(20)
+  aniversario  DateTime?     @db.Date()
+  genero       Genero?
+  observacao   String?       @db.Text()
+  foto         String?       @db.VarChar(255)
+  status       UsuarioStatus @default(NOVO)
+  funcao       UsuarioFuncao @default(USUARIO)
+  departamento Departamento  @default(SEM_DEPARTAMENTO)
+  verificado   Boolean       @default(false)
+  ativo        Boolean       @default(true)
+  createdAt    DateTime      @default(now()) @db.DateTime(0)
+  updatedAt    DateTime      @updatedAt
+  deletedAt    DateTime?     @db.DateTime(0)
+
+  recuperacoes            UsuarioRecuperacao[]
+  mfa                     UsuarioMfa?
+  gruposAcesso            GrupoAcessoMembro[]
+  permissoes              UsuarioPermissao[]
+  amizadesSolicitadas     Amizade[]                @relation("AmizadeSolicitante")
+  amizadesRecebidas       Amizade[]                @relation("AmizadeReceptor")
+  publicacoes             Publicacao[]
+  comentarios             PublicacaoComentario[]
+  curtidas                PublicacaoCurtida[]
+  publicacoesConhecimento PublicacaoConhecimento[]
+
+  @@map("usuarios")
+}
+
+/**
+ * ===========================
+ * MODELO: USUÁRIO RECUPERAÇÃO
+ * ===========================
+ */
+
+model UsuarioRecuperacao {
+  id        Int       @id @default(autoincrement())
+  token     String    @db.VarChar(255)
+  codigo    String    @unique @db.Char(6)
+  usuarioId Int
+  resetAt   DateTime? @db.DateTime(0)
+  createdAt DateTime  @default(now()) @db.DateTime(0)
+  updatedAt DateTime  @updatedAt
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_usuarios_recuperacoes_usuarios")
+
+  @@map("usuarios_recuperacoes")
+}
+
+/**
+ * ===========================
+ * MODELO: USUÁRIO MFA
+ * ===========================
+ */
+
+model UsuarioMfa {
+  id             Int       @id @default(autoincrement())
+  usuarioId      Int       @unique
+  segredo        String    @db.VarChar(255)
+  ativo          Boolean   @default(false)
+  tentativasErro Int       @default(0)
+  bloqueadoAte   DateTime? @db.DateTime(0)
+  createdAt      DateTime  @default(now()) @db.DateTime(0)
+  updatedAt      DateTime  @updatedAt
+
+  usuario       Usuario                @relation(fields: [usuarioId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_usuarios_mfa_usuarios")
+  codigosBackup UsuarioMfaBackupCode[]
+
+  @@map("usuarios_mfa")
+}
+
+/**
+ * ===========================
+ * MODELO: USUÁRIO MFA BACKUP CODE
+ * ===========================
+ */
+
+model UsuarioMfaBackupCode {
+  id           Int       @id @default(autoincrement())
+  usuarioMfaId Int
+  codigoHash   String    @db.VarChar(255)
+  utilizado    Boolean   @default(false)
+  utilizadoEm  DateTime? @db.DateTime(0)
+  createdAt    DateTime  @default(now()) @db.DateTime(0)
+
+  usuarioMfa UsuarioMfa @relation(fields: [usuarioMfaId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_mfa_backup_codes_mfa")
+
+  @@map("usuarios_mfa_backup_codes")
+}
+
+/**
+ * ===========================
+ * MODELO: MÓDULO DO SISTEMA
+ * ===========================
+ */
+
+model Modulo {
+  id        Int       @id @default(autoincrement())
+  nome      String    @unique @db.VarChar(100)
+  descricao String?   @db.VarChar(255)
+  ativo     Boolean   @default(true)
+  createdAt DateTime  @default(now()) @db.DateTime(0)
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime? @db.DateTime(0)
+
+  permissoesGrupo   GrupoAcessoPermissao[]
+  permissoesUsuario UsuarioPermissao[]
+
+  @@map("modulos")
+}
+
+/**
+ * ===========================
+ * MODELO: GRUPO DE ACESSO
+ * ===========================
+ */
+
+model GrupoAcesso {
+  id        Int       @id @default(autoincrement())
+  nome      String    @unique @db.VarChar(100)
+  descricao String?   @db.VarChar(255)
+  ativo     Boolean   @default(true)
+  createdAt DateTime  @default(now()) @db.DateTime(0)
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime? @db.DateTime(0)
+
+  membros    GrupoAcessoMembro[]
+  permissoes GrupoAcessoPermissao[]
+
+  @@map("grupos_acesso")
+}
+
+/**
+ * ===========================
+ * MODELO: GRUPO ACESSO MEMBRO
+ * ===========================
+ */
+
+model GrupoAcessoMembro {
+  id            Int      @id @default(autoincrement())
+  grupoAcessoId Int
+  usuarioId     Int
+  createdAt     DateTime @default(now()) @db.DateTime(0)
+
+  grupoAcesso GrupoAcesso @relation(fields: [grupoAcessoId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_grupos_acesso_membros_grupos")
+  usuario     Usuario     @relation(fields: [usuarioId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_grupos_acesso_membros_usuarios")
+
+  @@unique([grupoAcessoId, usuarioId])
+  @@map("grupos_acesso_membros")
+}
+
+/**
+ * ===========================
+ * MODELO: GRUPO ACESSO PERMISSÃO
+ * ===========================
+ */
+
+model GrupoAcessoPermissao {
+  id            Int            @id @default(autoincrement())
+  grupoAcessoId Int
+  moduloId      Int
+  nivel         NivelPermissao @default(NENHUM)
+  createdAt     DateTime       @default(now()) @db.DateTime(0)
+  updatedAt     DateTime       @updatedAt
+
+  grupoAcesso GrupoAcesso @relation(fields: [grupoAcessoId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_grupos_acesso_permissoes_grupos")
+  modulo      Modulo      @relation(fields: [moduloId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_grupos_acesso_permissoes_modulos")
+
+  @@unique([grupoAcessoId, moduloId])
+  @@map("grupos_acesso_permissoes")
+}
+
+/**
+ * ===========================
+ * MODELO: USUÁRIO PERMISSÃO
+ * ===========================
+ */
+
+model UsuarioPermissao {
+  id        Int            @id @default(autoincrement())
+  usuarioId Int
+  moduloId  Int
+  nivel     NivelPermissao @default(NENHUM)
+  createdAt DateTime       @default(now()) @db.DateTime(0)
+  updatedAt DateTime       @updatedAt
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_usuarios_permissoes_usuarios")
+  modulo  Modulo  @relation(fields: [moduloId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_usuarios_permissoes_modulos")
+
+  @@unique([usuarioId, moduloId])
+  @@map("usuarios_permissoes")
+}
+
+/**
+ * ===========================
+ * MODELO: AMIZADE
+ * ===========================
+ */
+
+model Amizade {
+  id            Int           @id @default(autoincrement())
+  solicitanteId Int
+  receptorId    Int
+  status        AmizadeStatus @default(PENDENTE)
+  createdAt     DateTime      @default(now()) @db.DateTime(0)
+  updatedAt     DateTime      @updatedAt
+
+  solicitante Usuario @relation("AmizadeSolicitante", fields: [solicitanteId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_amizades_solicitante")
+  receptor    Usuario @relation("AmizadeReceptor", fields: [receptorId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_amizades_receptor")
+
+  @@unique([solicitanteId, receptorId])
+  @@map("amizades")
+}
+
+/**
+ * ===========================
+ * MODELO: PUBLICAÇÃO
+ * ===========================
+ */
+
+model Publicacao {
+  id           Int            @id @default(autoincrement())
+  autorId      Int
+  tipo         PublicacaoTipo
+  conteudo     String?        @db.Text()
+  midia        String?        @db.VarChar(500)
+  visibilidade Visibilidade   @default(AMIGOS)
+  ativo        Boolean        @default(true)
+  createdAt    DateTime       @default(now()) @db.DateTime(0)
+  updatedAt    DateTime       @updatedAt
+  deletedAt    DateTime?      @db.DateTime(0)
+
+  autor       Usuario                @relation(fields: [autorId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_publicacoes_usuarios")
+  comentarios PublicacaoComentario[]
+  curtidas    PublicacaoCurtida[]
+
+  @@map("publicacoes")
+}
+
+/**
+ * ===========================
+ * MODELO: PUBLICAÇÃO COMENTÁRIO
+ * ===========================
+ */
+
+model PublicacaoComentario {
+  id           Int       @id @default(autoincrement())
+  publicacaoId Int
+  autorId      Int
+  conteudo     String    @db.Text()
+  ativo        Boolean   @default(true)
+  createdAt    DateTime  @default(now()) @db.DateTime(0)
+  updatedAt    DateTime  @updatedAt
+  deletedAt    DateTime? @db.DateTime(0)
+
+  publicacao Publicacao @relation(fields: [publicacaoId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_publicacoes_comentarios_publicacoes")
+  autor      Usuario    @relation(fields: [autorId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_publicacoes_comentarios_usuarios")
+
+  @@map("publicacoes_comentarios")
+}
+
+/**
+ * ===========================
+ * MODELO: PUBLICAÇÃO CURTIDA
+ * ===========================
+ */
+
+model PublicacaoCurtida {
+  id           Int      @id @default(autoincrement())
+  publicacaoId Int
+  usuarioId    Int
+  createdAt    DateTime @default(now()) @db.DateTime(0)
+
+  publicacao Publicacao @relation(fields: [publicacaoId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_publicacoes_curtidas_publicacoes")
+  usuario    Usuario    @relation(fields: [usuarioId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_publicacoes_curtidas_usuarios")
+
+  @@unique([publicacaoId, usuarioId])
+  @@map("publicacoes_curtidas")
+}
+
+/**
+ * ===========================
+ * MODELO: PUBLICAÇÃO CONHECIMENTO
+ * ===========================
+ */
+
+model PublicacaoConhecimento {
+  id           Int                      @id @default(autoincrement())
+  autorId      Int
+  titulo       String                   @db.VarChar(255)
+  descricao    String?                  @db.Text()
+  urlYoutube   String                   @db.VarChar(500)
+  visibilidade VisibilidadeConhecimento @default(PRIVADO)
+  ativo        Boolean                  @default(true)
+  createdAt    DateTime                 @default(now()) @db.DateTime(0)
+  updatedAt    DateTime                 @updatedAt
+  deletedAt    DateTime?                @db.DateTime(0)
+
+  autor Usuario @relation(fields: [autorId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_publicacoes_conhecimento_usuarios")
+
+  @@map("publicacoes_conhecimento")
+}
