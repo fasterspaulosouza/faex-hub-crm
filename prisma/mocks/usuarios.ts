@@ -1,5 +1,5 @@
-// senha de todos os usuários de teste: Test@1234
-const SENHA_TESTE = '$2b$10$BHRHSdOr3hc6HyF1rCuvzOx0nzZnYL7n46oPaCSV4wNtU3sQiIai6'
+// senha de todos os usuários de teste: teste@123
+const SENHA_TESTE = '$2b$10$7P8oFmnhx7Vmeb2mOEh48.R24paeX3s29drOX12vnxFrFQImxrSG.'
 
 export const usuariosMock = [
   {
